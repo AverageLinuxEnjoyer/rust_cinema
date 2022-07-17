@@ -1,3 +1,6 @@
+mod domain;
+mod validators;
+
 fn main() {
-    println!("Hello, world!");
+    let mut input = String::new();
 }
