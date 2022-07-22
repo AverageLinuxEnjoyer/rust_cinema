@@ -1,11 +1,41 @@
-use crate::validators::movie_validator::*;
+use crate::repo::traits::Serializable;
+use crate::validators::common_validators::id_validator;
+use crate::validators::movie_validator::{
+    movie_validator, price_validator, release_year_validator, title_validator,
+};
 
+#[derive(Debug)]
 pub struct Movie {
     id: u32,
     title: String,
     release_year: u32,
     price: u32,
     in_program: bool,
+}
+
+impl Serializable for Movie {
+    fn to_csv(&self) -> String {
+        format!(
+            "\"{}\",\"{}\",\"{}\",\"{}\",\"{}\"",
+            self.id, self.title, self.release_year, self.price, self.in_program,
+        )
+    }
+
+    fn from_csv_to_obj(s: &str) -> Movie {
+        let mut parts = s.trim().trim_matches('"').split("\",\"");
+
+        let id: u32 = parts.next().unwrap_or("0").parse().unwrap_or(0);
+
+        let title: String = parts.next().unwrap_or("placeholder").to_string();
+
+        let release_year: u32 = parts.next().unwrap_or("1926").parse().unwrap_or(1926);
+
+        let price: u32 = parts.next().unwrap_or("0").parse().unwrap_or(0);
+
+        let in_program: bool = parts.next().unwrap_or("false").parse().unwrap_or(false);
+
+        Movie::new(id, &title, release_year, price, in_program).unwrap()
+    }
 }
 
 impl Movie {

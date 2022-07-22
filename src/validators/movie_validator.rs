@@ -1,9 +1,5 @@
 use crate::domain::movie::Movie;
-
-pub fn id_validator(id: u32) -> Result<(), String> {
-    // no validation, exists cause it may be needed in the future
-    Result::Ok(())
-}
+use crate::validators::common_validators::id_validator;
 
 pub fn title_validator(title: &str) -> Result<(), String> {
     if title.len() > 1 && title.len() < 21 {
@@ -25,7 +21,7 @@ pub fn price_validator(price: u32) -> Result<(), String> {
     if price < 10_000 {
         Result::Ok(())
     } else {
-        Result::Err("The price needs to be up to 10.000".into())
+        Result::Err("The price must be lower than 10.000".into())
     }
 }
 
